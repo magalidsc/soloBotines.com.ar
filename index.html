@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <!--Título-->
+  <title>Tienda online de botines</title>
+</head>
+
+<body>
+  <!--Comienza Header-->
+  <header>
+    <nav class="navbar navbar-dark bg-primary justify-content-end">
+      <!-- Navbar content -->
+
+      <div class="container-fluid">
+        <a class="navbar-brand" id="logo" href="index.html">SoloBotines.com.ar</a>
+
+      </div>
+      <div class="navbar-brand divCotizacion" id="cotizacion"></div>
+    </nav>
+
+    <div class="container-lg">
+      <div class="row">
+        <div class="col-lg-6 contenedor">
+          <button id="howToBuy" class="accordion-button" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne" aria-expanded="true">
+            Cómo comprar?
+          </button>
+          <p class="textos" id="textHowToBuy">
+            Para adquirir nuestros productos debes revisar nuestro catálogo,
+            presionar sobre el botón "Agregar al carrito" y completar tus
+            datos para que podamos procesar el pedido. Para finalizar,
+            recibirás el pedido en la comodidad de tu hogar
+          </p>
+        </div>
+
+        <div class="contenedor">
+          <button id="howToPay" class="accordion-button" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne" aria-expanded="true">
+            Medios de pago
+          </button>
+          <p class="textos" id="textHowToPay">
+            Actuamente es posible pagar en Efectivo, Mercado pago o con
+            tarjeta.
+          </p>
+        </div>
+        <br />
+
+
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Modal -->
+  <div class="modal fade" id="ModalError" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">Elige al menos 1 producto para avanzar con tu compra</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Volver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Avanzá con tu compra</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form" class="form-register" onsubmit="return addProduct()">
+            Nombre:<input type="text" name="fname" value="" id="inputName" required><br />
+            Apellido:<input type="text" name="flastName" value="" id="inputLastName" required><br />
+            Mail:<input type="email" name="mail" value="" id="inputEmail" required><br />
+            Método de pago:<select name="pago" id="inputPaymentMethod">
+              <option value="MERCADO PAGO" selected>MERCADO PAGO</option>
+              <option value="OTRO">OTRO</option>
+            </select>
+            <br />
+            <input type="submit" value="Enviar" id="buttonForm" class="btn btn-primary" />
+          </form>
+
+          <div id="confirmacionDatos"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="boton-seguir" class="btn btn-primary" data-bs-dismiss="modal">
+            Seguir comprando
+          </button>
+          <div class="btn-nueva-compra"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-6">
+        <div id="checklist-tipo">
+          <h3 class="titulos">Elige según el tipo de botín que estés buscando:</h3>
+
+           
+          <input onclick="createCards('FUTBOL')" type="radio" id="futbol" name="tipoProducto" class="tipoProducto"
+            value="FUTBOL" />
+
+            <label for="futbol">FUTBOL</label>
+           
+          <input onclick="createCards('HOCKEY')" type="radio" id="hockey" name="tipoProducto" class="tipoProducto"
+            value="HOCKEY" />
+
+            <label for="hockey">HOCKEY</label>
+           
+          <input onclick="createCards('RUGBY')" type="radio" id="rugby" name="tipoProducto" class="tipoProducto"
+            value="RUGBY" />
+
+          <label for="rugby">RUGBY</label>
+
+          <input onclick="createCards()" type="radio" id="allProducts" name="tipoProducto" class="tipoProducto"
+            value="allProducts" />
+
+          <label for="allProducts">TODOS</label>
+        </div>
+        <br />
+      </div>
+    </div>
+
+    <!--Carrito-->
+    <div class="container-lg">
+      <div class="row">
+        <div class="col-lg-6">
+          <h3 class="titulos">Productos seleccionados:</h3>
+          <ul id="listaCarrito" class="list-group"></ul>
+          <!-- Precio total -->
+          <p id="totalCarrito" class="text-right">
+            Total: <span id="total"></span> $(ars);
+          </p>
+          <button id="boton-vaciar" class="btn btn btn-outline-dark">
+            Vaciar Carrito
+          </button>
+          <button data-bs-toggle="modal" id="btn-comprar" class="btn btn-outline-dark">
+            Comprar
+          </button>
+        </div>
+        <br />
+      </div>
+    </div>
+  </div>
+
+  <!-- </div> -->
+
+  <!--Id Cards-->
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-lg-12 row" id="allCards"></div>
+    </div>
+  </div>
+
+  <!--Acá empieza Footer-->
+  <footer class="footer">
+    <p class="footer-p">Seguinos en:</p>
+
+    <nav class="footer-container">
+      <div class="div-footer">
+        <div class="facebook">
+          <a href="https://www.facebook.com/" target="_blank">
+            <img src="./img/facebook.svg" alt="Fanpage de Facebook" />
+          </a>
+        </div>
+
+        <div class="instagram">
+          <a href="https://www.instagram.com/" target="_blank">
+            <img src="./img/instagram.svg" alt="Página de Instagram" />
+          </a>
+        </div>
+      </div>
+    </nav>
+  </footer>
+
+  <!--Scripts-->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="js/productos.js"></script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+    integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+    integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
