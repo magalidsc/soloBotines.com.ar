@@ -24,8 +24,8 @@ function agregarAlCarrito(e) {
   mostrarCarrito();
   calcularTotal();
 }
-console.log(carrito);
 
+// Funcion para mostrar el carrito de compras
 function mostrarCarrito() {
   DOMcarrito.textContent = "";
   const quitamosDuplicados = [...new Set(carrito)];
@@ -62,7 +62,7 @@ function mostrarCarrito() {
   });
 }
 
-//Función VACIAR CARRITO//
+//Función VACIAR CARRITO
 $("#boton-vaciar").on("click", vaciarCarrito);
 
 function vaciarCarrito() {
@@ -82,6 +82,7 @@ function vaciarCarrito() {
   }
 }
 
+// Elimino productos del carrito y vuelvo a mostrar el contenido y el total
 function eliminarDelCarrito(e) {
   const idEliminado = e.target.dataset.productoCarro;
   carrito = carrito.filter((carritoId) => {
@@ -109,10 +110,8 @@ function calcularTotal() {
   }
 }
 
-// Creación array
+// Creación array clientes
 const listaClientes = [];
-
-// // Creación de objeto cliente con parámetros obtenidos en variables dentro de la función chart
 
 class Cliente {
   constructor(nombre, apellido, mail, pago) {
@@ -124,6 +123,9 @@ class Cliente {
 }
 
 const miCliente1 = new Cliente(nombreCliente, apellidoCliente, mail, pago);
+
+
+// Creación de las cards con los productos disponibles
 
 let newCards = "";
 
@@ -176,15 +178,15 @@ function createCards(filtro = "default") {
   });
 }
 
-// ----------------------------------------------------------------------------------
-//Variables para el input
+
+//Variables para el input del formulario
 let inputName = $("#inputName").val();
 let imputLastName = $("#inputLastName").val();
 let inputEmail = $("#inputLastName").val();
 let inputPaymentMethod = $("#inputPaymentMethod").val();
 
 let form = $("#buttonForm").on("click", function (e) {
-  console.log("Estoy escuchando el click");
+
 
   inputName = $("#inputName").val();
 
@@ -194,7 +196,7 @@ let form = $("#buttonForm").on("click", function (e) {
 
   inputPaymentMethod = $("#inputPaymentMethod").val();
 
-  console.log(inputName, imputLastName, inputEmail, inputPaymentMethod);
+
 
   listaClientes.push(
     new Cliente(inputName, imputLastName, inputEmail, inputPaymentMethod)
@@ -204,19 +206,11 @@ let form = $("#buttonForm").on("click", function (e) {
 
   addProduct();
 
-
   $(".btn-close").on("click", vaciarCarrito);
-  // $("#confirmacionDatos").append(`
-  //   <div>
-  //   <p>${listaClientes[0].nombre} ${listaClientes[0].apellido} Muchas gracias por tu compra!</p>
-  //   <p>Vas a estar recibiendo un mail en: ${listaClientes[0].mail} para coordinar el envío</p>
-  //   <p>Método de pago elegido: ${listaClientes[0].pago}</p>
-  //   </div>
-  //   `);
-
   return listaClientes;
 });
 
+// Función para mostrar el modal correspondiente en caso de tener un carrito vacio o un carrito con 1 producto al menos
 function carritoModal(e) {
   if (carrito.length == 0) {
     $("#ModalError").modal("show");
@@ -265,6 +259,7 @@ function addProduct() {
     return false;
   }
 
+  // Si el formulario se completa correctamente, ocultar form y botón "Seguir comprando", agregar confirmación de compra
   $("#form").fadeOut(1000);
   $("#boton-seguir").hide();
   $("#confirmacionDatos").append(`
@@ -278,7 +273,7 @@ function addProduct() {
 
 
 
-// Acordeon
+// Acordeon del header con animación
 
 $(function () {
   $("#textHowToBuy,#textHowToPay").hide();
@@ -291,12 +286,11 @@ $(function () {
   });
 });
 
-// Interactuar con API
+// Interactuar con API para obtener el valor del dolar hoy, guardarlo en el localStorage, mostrarlo en el dom y utilizarlo para calular el valor de los productos en esa moneda
 
 const urlApi =
   "https://openexchangerates.org/api/latest.json?app_id=e82d0e43d7a545ba923feba46e1ec1d8";
 
-// let valorDolar;
 
 function traerDolar() {
   $.get(urlApi, function (respuesta, estado) {
@@ -313,7 +307,6 @@ function traerDolar() {
   });
 }
 let dolarHoy = JSON.parse(localStorage.getItem("miDolar"));
-console.log(dolarHoy);
 traerDolar();
 
 createCards();
